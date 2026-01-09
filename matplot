@@ -10,10 +10,10 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.set_frame_on(False)
 
-# Cloud positions
+
 cloud_centers = [2.5, 5, 7.5]  # Left, Middle, Right
 
-# Draw clouds
+
 for center in cloud_centers:
     cloud_x = np.array([center - 1.5, center - 1, center - 0.5, center, center + 0.5, center + 1, center + 1.5])
     cloud_y = np.array([7, 8, 8.5, 9, 8.5, 8, 7])
