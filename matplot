@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# Set up the figure and axis
+
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.set_xlim(0, 10)
 ax.set_ylim(0, 10)
@@ -19,14 +19,14 @@ for center in cloud_centers:
     cloud_y = np.array([7, 8, 8.5, 9, 8.5, 8, 7])
     ax.fill(cloud_x, cloud_y, 'gray', alpha=0.7)
 
-# Add text in the middle cloud
+
 ax.text(5, 8.2, "SPEC COMPUTERS", fontsize=14, fontweight='bold', color='white',
         ha='center', va='center', bbox=dict(facecolor='blue', alpha=0.5, edgecolor='none'))
 
 # Number of falling numbers per cloud
 num_falling = 15
 
-# Initialize falling numbers for each cloud
+
 all_x_positions = []
 all_y_positions = []
 all_falling_numbers = []
@@ -41,7 +41,7 @@ for cloud_x in cloud_centers:
     all_y_positions.append(y_positions)
     all_falling_numbers.append(falling_numbers)
 
-    # Create text objects for numbers
+
     texts = [ax.text(x, y, str(num), fontsize=12, color='blue', ha='center')
              for x, y, num in zip(x_positions, y_positions, falling_numbers)]
     all_texts.append(texts)
@@ -52,27 +52,22 @@ fall_speeds = np.random.uniform(0.1, 0.3, (3, num_falling))
 def update(frame):
     global all_y_positions, all_x_positions, all_falling_numbers
 
-    for i in range(3):  # For each cloud
-        # Move numbers down
+    for i in range(3):
         all_y_positions[i] -= fall_speeds[i]
 
-        # Reset numbers that reach the bottom
         reset_mask = all_y_positions[i] < 0
         all_y_positions[i][reset_mask] = np.random.uniform(6, 6.5, reset_mask.sum())  # Reset Y position
         all_x_positions[i][reset_mask] = np.random.uniform(cloud_centers[i] - 1, cloud_centers[i] + 1, reset_mask.sum())  # Reset X position
         all_falling_numbers[i][reset_mask] = np.random.randint(0, 10, reset_mask.sum())  # Assign new numbers
 
-        # Update text positions and values
         for text, x, y, num in zip(all_texts[i], all_x_positions[i], all_y_positions[i], all_falling_numbers[i]):
             text.set_position((x, y))
             text.set_text(str(num))
 
     return sum(all_texts, [])  # Flatten list of lists
 
-# Create animation
 ani = animation.FuncAnimation(fig, update, frames=200, interval=50, blit=True)
 
-# Save as MP4 video
 ani.save("raining_numbers.mp4", writer="ffmpeg", fps=20)
 
 print("Video saved as raining_numbers.mp4!")
